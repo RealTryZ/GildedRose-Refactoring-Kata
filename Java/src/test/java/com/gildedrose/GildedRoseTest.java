@@ -47,86 +47,97 @@ class GildedRoseTest {
 
     @Test
     void agedBrieIncreasesQuality() {
-        Item[] items = new Item[] { new Item("Aged Brie", 1, 0) };
+        Item[] items = new Item[] { new Item(ItemName.AGED_BRIE.label, 1, 0) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
         Item item = app.items[0];
 
-        assertEquals("Aged Brie", item.name);
+        assertEquals(ItemName.AGED_BRIE.label, item.name);
         assertEquals(1, item.quality);
         assertEquals(0, item.sellIn);
     }
 
     @Test
     void agedBrieIncreasesQualityBy2() {
-        Item[] items = new Item[] { new Item("Aged Brie", 0, 0) };
+        Item[] items = new Item[] { new Item(ItemName.AGED_BRIE.label, 0, 0) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
         Item item = app.items[0];
 
-        assertEquals("Aged Brie", item.name);
+        assertEquals(ItemName.AGED_BRIE.label, item.name);
         assertEquals(2, item.quality);
         assertEquals(-1, item.sellIn);
     }
 
     @Test
     void articleQualityNotAbove50() {
-        Item[] items = new Item[] { new Item("Aged Brie", 0, 50) };
+        Item[] items = new Item[] { new Item(ItemName.AGED_BRIE.label, 0, 50), new Item(ItemName.BACKSTAGE_PASS.label, 3, 50) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        Item item = app.items[0];
+        Item agedBrie = app.items[0];
+        Item backstagePass = app.items[1];
 
-        assertEquals("Aged Brie", item.name);
-        assertEquals(50, item.quality);
-        assertEquals(-1, item.sellIn);
+        assertEquals(ItemName.AGED_BRIE.label, agedBrie.name);
+        assertEquals(50, agedBrie.quality);
+        assertEquals(-1, agedBrie.sellIn);
+
+        assertEquals(ItemName.BACKSTAGE_PASS.label, backstagePass.name);
+        assertEquals(50, backstagePass.quality);
+        assertEquals(2, backstagePass.sellIn);
     }
 
     @Test
     void sulfurasNoChange() {
-        Item[] items = new Item[] { new Item("Sulfuras, Hand of Ragnaros", 0, 80) };
+        Item[] items = new Item[] { new Item(ItemName.SULFURAS.label, 0, 80) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
         Item item = app.items[0];
 
-        assertEquals("Sulfuras, Hand of Ragnaros", item.name);
+        assertEquals(ItemName.SULFURAS.label, item.name);
         assertEquals(80, item.quality);
         assertEquals(0, item.sellIn);
     }
 
     @Test
     void backstagePasses() {
-        Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", 11, 30) };
+        Item[] items = new Item[] { new Item(ItemName.BACKSTAGE_PASS.label, 11, 30) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
         Item item = app.items[0];
 
-        assertEquals("Backstage passes to a TAFKAL80ETC concert", item.name);
+        assertEquals(ItemName.BACKSTAGE_PASS.label, item.name);
         assertEquals(31, item.quality);
         assertEquals(10, item.sellIn);
 
         app.updateQuality();
 
-        assertEquals("Backstage passes to a TAFKAL80ETC concert", item.name);
+        assertEquals(ItemName.BACKSTAGE_PASS.label, item.name);
         assertEquals(33, item.quality);
         assertEquals(9, item.sellIn);
 
         items[0].sellIn = 5;
         app.updateQuality();
 
-        assertEquals("Backstage passes to a TAFKAL80ETC concert", item.name);
+        assertEquals(ItemName.BACKSTAGE_PASS.label, item.name);
         assertEquals(36, item.quality);
         assertEquals(4, item.sellIn);
 
         items[0].sellIn = 0;
         app.updateQuality();
 
-        assertEquals("Backstage passes to a TAFKAL80ETC concert", item.name);
+        assertEquals(ItemName.BACKSTAGE_PASS.label, item.name);
         assertEquals(0, item.quality);
         assertEquals(-1, item.sellIn);
+
+        app.updateQuality();
+
+        assertEquals(ItemName.BACKSTAGE_PASS.label, item.name);
+        assertEquals(0, item.quality);
+        assertEquals(-2, item.sellIn);
     }
 }
